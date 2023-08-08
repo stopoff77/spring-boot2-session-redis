@@ -118,6 +118,8 @@ server:
 
 # logging
 logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS, ${project.time-zone}} %highlight(${LOG_LEVEL_PATTERN:-%5p}) %clr([%t]) [%X{requestUri}] %boldBlue([${spring.application.name}]) %highlight(%logger{36}){cyan} [%L] | %msg%n"
   level:
     root: INFO
     com.example: DEBUG

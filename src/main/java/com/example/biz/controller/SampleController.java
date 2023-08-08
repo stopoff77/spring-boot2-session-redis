@@ -42,4 +42,31 @@ public class SampleController {
 
         return ResponseEntity.ok(body);
     }
+
+    @RequestMapping(value={"/logout"})
+    public ResponseEntity<Object> logout(HttpServletRequest request, HttpServletResponse response){
+        Map<String, Object> body = new TreeMap<>();
+
+        Cookie[] cookies = request.getCookies();
+        if(cookies != null) {
+            for(Cookie cookie : cookies) {
+                String name = cookie.getName();
+                String value= cookie.getValue();
+
+                log.debug("cookie {}[{}]", name, value);
+            }
+        }
+
+        HttpSession session = request.getSession();
+
+        String sessionId = session.getId();
+        String requestedSessionId = request.getRequestedSessionId();
+
+        body.put("sessionId", sessionId);
+        body.put("requestedSessionId", requestedSessionId);
+
+        session.invalidate();
+
+        return ResponseEntity.ok(body);
+    }
 }

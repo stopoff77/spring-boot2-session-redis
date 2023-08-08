@@ -7,6 +7,7 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
+import com.example.configuration.listener.CustomSessionListener;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @EnableRedisHttpSession(redisNamespace = "${spring.session.redis.namespace}")
@@ -15,9 +16,10 @@ public class RedisSessionConfiguration implements BeanClassLoaderAware {
 
     private ClassLoader loader;
 
-    @Bean
-    public RedisSerializer<Object> springSessionDefaultRedisSerializer() {
-        return new GenericJackson2JsonRedisSerializer(objectMapper());
+
+    @Override
+    public void setBeanClassLoader(ClassLoader classLoader) {
+        this.loader = classLoader;
     }
 
     /**
@@ -32,14 +34,14 @@ public class RedisSessionConfiguration implements BeanClassLoaderAware {
         return mapper;
     }
 
-    /*
-     * @see
-     * org.springframework.beans.factory.BeanClassLoaderAware#setBeanClassLoader(java.lang
-     * .ClassLoader)
-     */
-    @Override
-    public void setBeanClassLoader(ClassLoader classLoader) {
-        this.loader = classLoader;
+
+    @Bean
+    public RedisSerializer<Object> springSessionDefaultRedisSerializer() {
+        return new GenericJackson2JsonRedisSerializer(objectMapper());
     }
 
+    @Bean
+    public CustomSessionListener customSessionListener() {
+       return new CustomSessionListener();
+    }
 }
