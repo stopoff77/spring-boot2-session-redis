@@ -1,0 +1,125 @@
+########## local, dev, prd 공통 설정 ##########
+
+project:
+  name: spring-boot2-session-redis
+  version: 1.0
+  base-pkg: com.example #// FIXME CHECK-package 확인 (공통 설정)
+  locale: ko_KR
+  time-zone: Asia/Seoul
+#  locale: en_US
+#  time-zone: UTC
+
+
+spring:
+  main:
+    banner-mode: CONSOLE # OFF, CONSOLE, LOG
+    allow-bean-definition-overriding: true # ApplicationContext 내에서 다른 bean과 동일한 이름을 가진 bean을 정의할 때 발생하는 기본 동작
+    allow-circular-references: true
+  lifecycle:
+    timeout-per-shutdown-phase: 20s
+  application:
+    name: ${project.name}
+  mvc:
+    pathmatch:
+      use-suffix-pattern: true
+      # security나 filter에서 RequestMappingHandlerMapping 사용 하기 위한 설정 (spring-boot 2.6.x issue)
+      matching-strategy: ANT_PATH_MATCHER
+    servlet:
+      path: /
+
+# thymleaf
+  thymeleaf:
+    check-template-location: true
+    prefix: classpath:templates
+    suffix: .html
+    mode: HTML
+    cache: false #cache 사용안함
+#    order: 0
+
+# servlet.multipart
+  servlet:
+    multipart:
+      location: /tmp
+      max-request-size: 20MB
+      max-file-size: 70MB
+# spring-session
+  session:
+    storage-type : redis
+    redis.namespace: spring.session.local
+# redis
+  redis:
+    host: 127.0.0.1
+    port: 6379
+
+
+# jsp 설정
+#  mvc:
+#    view:
+#      prefix: /WEB-INF/views/
+#      suffix: .jsp
+
+
+#
+management:
+  health:
+    defaults:
+      enabled: false
+  endpoints:
+    web:
+      base-path: /health
+      path-mapping:
+        health: check
+      exposure:
+        include: health,prometheus,metrics
+  endpoint:
+    health:
+      show-details: never
+      show-components: never
+      probes:
+        enabled: true
+  metrics:
+    web:
+      client:
+        max-uri-tags: 200
+      server:
+        max-uri-tags: 200
+
+
+#
+server:
+  shutdown: graceful
+  port: 8080
+  tomcat:
+    max-http-form-post-size: 20MB
+    max-connections: 1024  # default 8192
+    threads:
+      min-spare: 51
+      max: 101            # default 200
+  servlet:
+    context-path: /
+    session:
+      timeout: 30s # 30초
+      cookie:
+        name: JSESSIONID # 세션 아이디 파라미터 명
+        domain: localhost
+        path: /
+        # 쿠키 보안
+#        http-only: true
+#        secure: true
+#        same-site: NONE
+        http-only: false
+        secure: false
+        same-site: LAX
+  error:
+    whitelabel:
+      enabled: false
+    path: /error
+
+
+# logging
+logging:
+  level:
+    root: INFO
+    com.example: DEBUG
+
+
