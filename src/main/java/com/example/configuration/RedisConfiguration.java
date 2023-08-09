@@ -13,6 +13,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+import io.lettuce.core.ClientOptions;
+import io.lettuce.core.SocketOptions;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -40,10 +42,10 @@ public class RedisConfiguration {
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         LettuceClientConfiguration lettuceClientConfiguration = LettuceClientConfiguration.builder()
-            .clientOptions(ClientOptions.builder().
+            .clientOptions(ClientOptions.builder()
                            .socketOptions(
-                               SockerOptions.builder((
-                               .connectionTimeout(Duration.odMillis(2000))
+                               SocketOptions.builder()
+                               .connectTimeout(Duration.ofMillis(2000))
                                .build())
                            .build())
             .commandTimeout(Duration.ofMinutes(1))

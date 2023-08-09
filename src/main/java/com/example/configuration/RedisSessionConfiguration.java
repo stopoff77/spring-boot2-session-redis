@@ -1,19 +1,40 @@
 package com.example.configuration;
 
 import org.springframework.beans.factory.BeanClassLoaderAware;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
+import org.springframework.session.web.http.CookieSerializer;
+import org.springframework.session.web.http.DefaultCookieSerializer;
 
 import com.example.configuration.listener.CustomSessionListener;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@EnableRedisHttpSession(redisNamespace = "${spring.session.redis.namespace}")
+//@EnableRedisHttpSession(redisNamespace = "${spring.session.redis.namespace}")
 @Configuration
 public class RedisSessionConfiguration implements BeanClassLoaderAware {
 
+    @Value("${server.servlet.session.cookie.name}")
+    private String name;
+
+    @Value("${server.servlet.session.cookie.domain}")
+    private String domain;
+
+    @Value("${server.servlet.session.cookie.path}")
+    private String path;
+
+    @Value("${server.servlet.session.cookie.http-only}")
+    private boolean httpOnly;
+
+    @Value("${server.servlet.session.cookie.secure}")
+    private boolean secure;
+
+    @Value("${server.servlet.session.cookie.same-site}")
+    private String sameSite;
+
+    //
     private ClassLoader loader;
 
 
@@ -43,5 +64,20 @@ public class RedisSessionConfiguration implements BeanClassLoaderAware {
     @Bean
     public CustomSessionListener customSessionListener() {
        return new CustomSessionListener();
+    }
+
+    @Bean
+    public CookieSerializer cookieSerializer() {
+        DefaultCookieSerializer serializer = new DefaultCookieSerializer();
+        serializer.setUseBase64Encoding(false);
+        serializer.setCookieName(name);
+        serializer.setDomainName(domain);
+        serializer.setCookiePath(path);
+        serializer.setUseHttpOnlyCookie(httpOnly);
+        serializer.setUseSecureCookie(secure);
+        serializer.setSameSite(sameSite);
+
+//        serializer.setDomainNamePattern("^.+?\\.(\\w+\\.[a-z]+)$");
+        return serializer;
     }
 }
