@@ -40,7 +40,13 @@ public class RedisConfiguration {
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         LettuceClientConfiguration lettuceClientConfiguration = LettuceClientConfiguration.builder()
-                .commandTimeout(Duration.ofMinutes(1))
+            .clientOptions(ClientOptions.builder().
+                           .socketOptions(
+                               SockerOptions.builder((
+                               .connectionTimeout(Duration.odMillis(2000))
+                               .build())
+                           .build())
+            .commandTimeout(Duration.ofMinutes(1))
                 .shutdownTimeout(Duration.ZERO)
                 .build();
 
