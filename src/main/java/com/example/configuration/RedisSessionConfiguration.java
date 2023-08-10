@@ -51,6 +51,7 @@ public class RedisSessionConfiguration implements BeanClassLoaderAware {
     private ObjectMapper objectMapper() {
         ObjectMapper mapper = new ObjectMapper();
 //        mapper.registerModules(SecurityJackson2Modules.getModules(this.loader));
+        mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 
         return mapper;
     }
