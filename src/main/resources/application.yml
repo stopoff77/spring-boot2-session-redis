@@ -96,6 +96,10 @@ server:
       min-spare: 51
       max: 101            # default 200
   servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
     context-path: /
     session:
       timeout: 30s # 30초

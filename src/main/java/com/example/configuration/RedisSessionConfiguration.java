@@ -1,16 +1,22 @@
 package com.example.configuration;
 
+import java.util.Locale;
+import java.util.TimeZone;
+
 import org.springframework.beans.factory.BeanClassLoaderAware;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.security.jackson2.SecurityJackson2Modules;
 import org.springframework.session.web.http.CookieSerializer;
 import org.springframework.session.web.http.DefaultCookieSerializer;
 
-import com.example.configuration.listener.CustomSessionListener;
+import com.example.configuration.listener.session.CustomSessionListener;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 //@EnableRedisHttpSession(redisNamespace = "${spring.session.redis.namespace}")
 @Configuration
@@ -49,9 +55,17 @@ public class RedisSessionConfiguration implements BeanClassLoaderAware {
      * @return the {@link ObjectMapper} to use
      */
     private ObjectMapper objectMapper() {
-        ObjectMapper mapper = new ObjectMapper();
-//        mapper.registerModules(SecurityJackson2Modules.getModules(this.loader));
-        mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+        ObjectMapper mapper = Jackson2ObjectMapperBuilder.json()
+                .serializationInclusion(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL) // Object => Json (null field ignore)
+                .failOnUnknownProperties(false)
+                .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                .featuresToDisable(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS)
+                .timeZone(TimeZone.getDefault())
+                .locale(Locale.getDefault())
+                .simpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+                .build();
+
+        mapper.registerModules(SecurityJackson2Modules.getModules(this.loader));
 
         return mapper;
     }
