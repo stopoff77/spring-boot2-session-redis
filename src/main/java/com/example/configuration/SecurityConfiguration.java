@@ -57,6 +57,7 @@ public class SecurityConfiguration {
         // security 설정 제외(security filter에 안걸림)
         List<String> ignoreList = Arrays.asList(
                   "/favicon.ico"
+                , "/**/*.ico"
                 , "/h2-console/**" // in-memory db console 화면
         );
 
