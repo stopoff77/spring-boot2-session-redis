@@ -14,7 +14,7 @@ import org.springframework.security.jackson2.SecurityJackson2Modules;
 import org.springframework.session.web.http.CookieSerializer;
 import org.springframework.session.web.http.DefaultCookieSerializer;
 
-import com.example.configuration.listener.session.CustomSessionListener;
+import com.example.configuration.listener.session.CustomHttpSessionEventPublisher;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
@@ -77,11 +77,6 @@ public class RedisSessionConfiguration implements BeanClassLoaderAware {
     }
 
     @Bean
-    public CustomSessionListener customSessionListener() {
-       return new CustomSessionListener();
-    }
-
-    @Bean
     public CookieSerializer cookieSerializer() {
         DefaultCookieSerializer serializer = new DefaultCookieSerializer();
         serializer.setUseBase64Encoding(false);
@@ -95,4 +90,13 @@ public class RedisSessionConfiguration implements BeanClassLoaderAware {
 //        serializer.setDomainNamePattern("^.+?\\.(\\w+\\.[a-z]+)$");
         return serializer;
     }
+
+
+    // session listener
+    @Bean
+    CustomHttpSessionEventPublisher httpSessionListener() {
+//        return new CustomSessionListener();
+        return new CustomHttpSessionEventPublisher();
+    }// Register HttpSessionEventPublisher
+
 }
