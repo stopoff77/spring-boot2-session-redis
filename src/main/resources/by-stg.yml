@@ -1,0 +1,11 @@
+
+---
+# 테스트
+spring:
+  config:
+    activate:
+      on-profile: stg
+
+#
+server:
+  port: 8083

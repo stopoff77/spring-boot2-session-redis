@@ -12,7 +12,10 @@ project:
 spring:
   config:
     import:
-      - classpath:by-profile.yml
+      - classpath:by-local.yml
+      - classpath:by-dev.yml
+      - classpath:by-stg.yml
+      - classpath:by-prd.yml
 
   profiles:
     active: local

@@ -1,0 +1,11 @@
+
+---
+# 운영
+spring:
+  config:
+    activate:
+      on-profile: prd
+
+#
+server:
+  port: 8084
