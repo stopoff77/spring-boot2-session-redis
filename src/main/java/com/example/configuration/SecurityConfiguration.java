@@ -119,7 +119,7 @@ public class SecurityConfiguration {
 
 
     @Bean
-    public UserTokenFilter userTokenFilter() {
+    UserTokenFilter userTokenFilter() {
         return new UserTokenFilter();
     }
 

@@ -72,12 +72,12 @@ public class RedisSessionConfiguration implements BeanClassLoaderAware {
 
 
     @Bean
-    public RedisSerializer<Object> springSessionDefaultRedisSerializer() {
+    RedisSerializer<Object> springSessionDefaultRedisSerializer() {
         return new GenericJackson2JsonRedisSerializer(objectMapper());
     }
 
     @Bean
-    public CookieSerializer cookieSerializer() {
+    CookieSerializer cookieSerializer() {
         DefaultCookieSerializer serializer = new DefaultCookieSerializer();
         serializer.setUseBase64Encoding(false);
         serializer.setCookieName(name);

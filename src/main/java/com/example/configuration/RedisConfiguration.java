@@ -29,7 +29,7 @@ public class RedisConfiguration {
 
 
     @Bean
-    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
+    RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(connectionFactory);
 
@@ -40,7 +40,7 @@ public class RedisConfiguration {
     }
 
     @Bean
-    public RedisConnectionFactory redisConnectionFactory() {
+    RedisConnectionFactory redisConnectionFactory() {
         LettuceClientConfiguration lettuceClientConfiguration = LettuceClientConfiguration.builder()
             .clientOptions(ClientOptions.builder()
                            .socketOptions(
