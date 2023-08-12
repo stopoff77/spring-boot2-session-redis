@@ -19,7 +19,7 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
-import com.example.common.filter.UserTokenFilter;
+import com.example.common.filter.web.UserTokenFilter;
 
 import lombok.extern.slf4j.Slf4j;
 

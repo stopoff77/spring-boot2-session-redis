@@ -1,4 +1,4 @@
-package com.example.configuration.security.authentication;
+package com.example.configuration.security.authority;
 
 import javax.servlet.http.HttpServletRequest;
 
