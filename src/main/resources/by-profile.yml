@@ -1,0 +1,27 @@
+---
+# 운영
+spring:
+  config:
+    activate:
+      on-profile: prd
+
+---
+# 테스트
+spring:
+  config:
+    activate:
+      on-profile: stg
+
+---
+#개발
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+---
+#개발
+spring:
+  config:
+    activate:
+      on-profile: local

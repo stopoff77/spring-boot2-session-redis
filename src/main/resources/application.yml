@@ -9,8 +9,14 @@ project:
 #  locale: en_US
 #  time-zone: UTC
 
-
 spring:
+  config:
+    import:
+      - classpath:by-profile.yml
+
+  profiles:
+    active: local
+
   main:
     banner-mode: CONSOLE # OFF, CONSOLE, LOG
     allow-bean-definition-overriding: true # ApplicationContext 내에서 다른 bean과 동일한 이름을 가진 bean을 정의할 때 발생하는 기본 동작
