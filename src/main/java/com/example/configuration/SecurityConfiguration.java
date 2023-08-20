@@ -104,7 +104,13 @@ public class SecurityConfiguration {
         ;
 
         http.formLogin().disable();
-        http.logout().disable();
+        http.logout()
+            .logoutUrl("/logout/logout")
+            .logoutSuccessUrl("/")
+            .deleteCookies("JSESSIONID", "JSESSIONID", sessionCookieName)
+            .invalidateHttpSession(true)
+            .permitAll();
+
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
 
