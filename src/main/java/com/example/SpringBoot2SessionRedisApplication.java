@@ -15,6 +15,10 @@
  * */
 package com.example;
 
+import java.util.Locale;
+import java.util.TimeZone;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -25,6 +29,9 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 
 import com.example.configuration.ComponentScanConfiguration;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @EnableAutoConfiguration(exclude = {
         DataSourceTransactionManagerAutoConfiguration.class
       , JndiDataSourceAutoConfiguration.class
@@ -35,6 +42,31 @@ import com.example.configuration.ComponentScanConfiguration;
 })
 @SpringBootApplication( scanBasePackageClasses = { ComponentScanConfiguration.class } )
 public class SpringBoot2SessionRedisApplication {
+
+    /**
+     * default Locale & default TimeZone 설정
+     */
+    public SpringBoot2SessionRedisApplication(
+            @Value("${project.locale}"   ) Locale defaultLocale,
+            @Value("${project.time-zone}") TimeZone defaultTimeZone) {
+
+        log.debug("yaml locale   {}", defaultLocale);
+        log.debug("yaml locale   {}", Locale.KOREA);
+
+        log.debug("yaml timeZone {}", defaultTimeZone.getID());
+        log.debug("yaml timeZone {}", defaultTimeZone.getDisplayName());
+        log.debug("yaml timeZone {}", defaultTimeZone.getID());
+        log.debug("yaml timeZone {}", TimeZone.getTimeZone("UTC").getID());
+        log.debug("yaml timeZone {}", TimeZone.getDefault().getID());
+
+        // default Locale, default TimeZone 설정
+        Locale.setDefault(defaultLocale);
+        TimeZone.setDefault(defaultTimeZone);
+
+        //
+        log.debug("yaml locale   {}", Locale.getDefault());
+        log.debug("yaml timeZone {}", TimeZone.getDefault().getID());
+    }
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringBoot2SessionRedisApplication.class, args);
