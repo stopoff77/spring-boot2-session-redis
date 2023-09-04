@@ -13,11 +13,18 @@
 	<version>${current.version}</version>
 	<name>spring-boot2-session-redis</name>
 	<description>template for Spring Boot2 session redis</description>
+
 	<properties>
 		<java.version>17</java.version>
 		<current.version>0.0.1-SNAPSHOT</current.version>
 	</properties>
+
 	<dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -27,11 +34,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
 
