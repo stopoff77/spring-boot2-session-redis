@@ -9,3 +9,10 @@ spring:
 #
 server:
   port: 8081
+  servlet:
+    session:
+      timeout: 30s # 30초
+      cookie:
+        http-only: false
+        secure: false
+        same-site: LAX

@@ -53,7 +53,8 @@ spring:
       max-file-size: 70MB
 # spring-session
   session:
-    storage-type : redis
+    #storage-type : redis
+    store-type: redis
     redis.namespace: spring.session.local
 # redis
   redis:
@@ -116,13 +117,9 @@ server:
         name: JSESSIONID # 세션 아이디 파라미터 명
         domain: localhost
         path: /
-        # 쿠키 보안
-#        http-only: true
-#        secure: true
-#        same-site: NONE
-        http-only: false
-        secure: false
-        same-site: LAX
+        http-only: true
+        secure: true
+        same-site: NONE
   error:
     whitelabel:
       enabled: false
