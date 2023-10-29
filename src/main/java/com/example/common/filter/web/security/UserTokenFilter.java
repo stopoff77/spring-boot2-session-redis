@@ -36,7 +36,6 @@ public class UserTokenFilter extends OncePerRequestFilter {
         log.debug("UserTokenFilter default constructor");
     }
 
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
@@ -44,7 +43,7 @@ public class UserTokenFilter extends OncePerRequestFilter {
         String requestUri = request.getRequestURI();
         log.debug("requestUri {}", requestUri);
 
-        // RunAsUserToken은 권한체크(SecurityAccessAuthority)만 실행
+        // RunAsUserToken은 권한체크(AccessAuthority)만 실행
         // UsernamePasswordAuthenticationToken은 LoginAuthenticationProvider 및 권한체크 실행
         LoginUserToken authToken = new LoginUserToken("", requestUri, "", null, null);
         SecurityContextHolder.getContext().setAuthentication(authToken);

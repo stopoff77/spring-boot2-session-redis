@@ -24,24 +24,22 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class SecurityAccessAuthority {
+public class AccessAuthority {
 
     public boolean isAccessible(Authentication authentication, HttpServletRequest request) {
         //
         String requestURI = request.getRequestURI();
-        log.debug("SecurityAccessAuthority {}", requestURI);
+        log.debug("AccessAuthority {}", requestURI);
 
-
-        if(authentication == null) {
+        if (authentication == null) {
             return false;
         }
 
-        Object principal  = authentication.getPrincipal();
+        Object principal = authentication.getPrincipal();
 
-        log.debug("SecurityAccessAuthority {}", authentication);
-        log.debug("SecurityAccessAuthority {}", authentication.isAuthenticated());
-        log.debug("SecurityAccessAuthority {}", principal);
-
+        log.debug("AccessAuthority {}", authentication);
+        log.debug("AccessAuthority {}", authentication.isAuthenticated());
+        log.debug("AccessAuthority {}", principal);
 
         return true;
     }

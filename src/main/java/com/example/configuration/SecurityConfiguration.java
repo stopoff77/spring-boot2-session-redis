@@ -43,16 +43,13 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 public class SecurityConfiguration {
 
-    protected final CharacterEncodingFilter     characterEncodingFilter;
+    protected final CharacterEncodingFilter characterEncodingFilter;
 
     @Value("${server.servlet.session.cookie.name}")
     private String sessionCookieName;
 
-
     /** constructor */
-    public SecurityConfiguration(
-          CharacterEncodingFilter characterEncodingFilter
-    ) {
+    public SecurityConfiguration(CharacterEncodingFilter characterEncodingFilter) {
         this.characterEncodingFilter = characterEncodingFilter;
 
         log.debug("characterEncodingFilter {}", characterEncodingFilter);
@@ -61,24 +58,20 @@ public class SecurityConfiguration {
         log.debug("characterEncodingFilter {}", characterEncodingFilter.getEncoding());
     }
 
-
     @Bean(BeanIds.AUTHENTICATION_MANAGER)
-    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
     WebSecurityCustomizer webSecurityCustomizer() {
         // security 설정 제외(security filter에 안걸림)
-        List<String> ignoreList = Arrays.asList(
-                  "/favicon.ico"
-                , "/**/*.ico"
-                , "/h2-console/**" // in-memory db console 화면
+        List<String> ignoreList = Arrays.asList("/favicon.ico", "/**/*.ico", "/h2-console/**" // in-memory db console 화면
         );
 
         return (web) -> web.ignoring().antMatchers(ignoreList.toArray(new String[0]));
     }
-
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -92,44 +85,27 @@ public class SecurityConfiguration {
 
         // HSTS - Http Strict Transport Security
         // https 요청시에만 응답헤더에 HSTS를 추가 함
-        http.headers()
-            .httpStrictTransportSecurity()
-            .includeSubDomains(true)
-            .maxAgeInSeconds(31536000)
+        http.headers().httpStrictTransportSecurity().includeSubDomains(true).maxAgeInSeconds(31536000)
 
-            // XSS Safe with Spring Security
-            .and()
-            .xssProtection()
-            .and()
-            .contentSecurityPolicy("script-src 'self'");
-            ;
-
-        http.authorizeRequests()
-            // 모든 사용자 접속 가능
-            .antMatchers(
-                  "/"
-                , "/error/**"
-            ).permitAll()
-            ;
-
-        http.authorizeRequests()
-        // 그외 권한 체크하여 접속 여부 구분 (expression 사용)
-        .anyRequest()
-        .access("@securityAccessAuthority.isAccessible(authentication, request)")
+                // XSS Safe with Spring Security
+                .and().xssProtection().and().contentSecurityPolicy("script-src 'self'");
         ;
 
-        http.formLogin().disable();
-        http.logout()
-            .logoutUrl("/logout/logout")
-            .logoutSuccessUrl("/")
-            .deleteCookies("JSESSIONID", "JSESSIONID", sessionCookieName)
-            .invalidateHttpSession(true)
-            .permitAll();
+        http.authorizeRequests()
+                // 모든 사용자 접속 가능
+                .antMatchers("/", "/error/**").permitAll();
 
+        http.authorizeRequests()
+                // 그외 권한 체크하여 접속 여부 구분 (expression 사용)
+                .anyRequest().access("@accessAuthority.isAccessible(authentication, request)");
+
+        http.formLogin().disable();
+        http.logout().logoutUrl("/logout/logout").logoutSuccessUrl("/")
+                .deleteCookies("JSESSIONID", "JSESSIONID", sessionCookieName).invalidateHttpSession(true).permitAll();
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
 
-        //SpringSecurity 사용시. CsrfFilter 앞에 CharacterEncodingFilter를 놓아야 한다.
+        // SpringSecurity 사용시. CsrfFilter 앞에 CharacterEncodingFilter를 놓아야 한다.
         http.addFilterBefore(characterEncodingFilter, CsrfFilter.class);
 
         // 토큰 인증 필터
@@ -137,7 +113,6 @@ public class SecurityConfiguration {
 
         return http.build();
     }
-
 
     @Bean
     UserTokenFilter userTokenFilter() {
