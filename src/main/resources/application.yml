@@ -39,7 +39,7 @@ spring:
 # thymleaf
   thymeleaf:
     check-template-location: true
-    prefix: classpath:templates
+    prefix: classpath:templates/
     suffix: .html
     mode: HTML
     cache: false #cache 사용안함
